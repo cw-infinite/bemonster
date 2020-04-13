@@ -12,4 +12,5 @@ Util
 ## Requirement
 >code block
 
-##숙제 일지
+#### 라이브러리 후보
+* [Plotly](https://plotly.com/javascript/getting-started/#start-plotting)
