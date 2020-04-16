@@ -10,6 +10,8 @@ Meeting ID: 716 1401 8544
 Password: 8avrQK
 
 ---
+### Easy Refs
+* [MarkUp Syntax](https://guides.github.com/features/mastering-markdown/)
 
 ### Requirements
 * 깃헙 웹페이지로 전환하기.
