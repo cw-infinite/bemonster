@@ -16,6 +16,7 @@ Password: 8avrQK
 ### Requirements
 * ~~깃헙 웹페이지로 전환하기.~~
 * React
+  * Study Note 만들기
 
 #### 라이브러리 후보
 * [Plotly](https://plotly.com/javascript/getting-started/#start-plotting)
