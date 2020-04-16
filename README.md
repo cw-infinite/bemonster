@@ -14,7 +14,7 @@ Password: 8avrQK
 * [MarkUp Syntax](https://guides.github.com/features/mastering-markdown/)
 
 ### Requirements
-* 깃헙 웹페이지로 전환하기.
+* ~~깃헙 웹페이지로 전환하기.~~
 * React
 
 #### 라이브러리 후보
