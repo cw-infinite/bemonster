@@ -17,4 +17,6 @@ Password: 8avrQK
 * ~~깃헙 웹페이지로 전환하기.~~
 * React
   * Study Note 만들기
-* Main Library [Plotly](https://plotly.com/javascript/getting-started/#start-plotting)
+* UI [Front End]
+  * Main Library for Graphic: [Plotly](https://plotly.com/javascript/getting-started/#start-plotting)
+  * React Library: [Semantic UI](https://semantic-ui.com/)
