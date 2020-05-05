@@ -3,7 +3,7 @@
 >*성공은 최종적인 게 아니며 실패는 치명적인 게 아니다. 중요한 것은 지속하고자 하는 용기다. - 윈스턴 처칠*
 ## [Name]
 
-## Applicatino Ussage.
+## Application Ussage.
 
 ## 
 
