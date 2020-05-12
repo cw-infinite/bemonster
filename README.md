@@ -1,5 +1,7 @@
+![](https://miro.medium.com/max/1000/1*x7P7gqjo8k2_bj2rTQWAfg.jpeg)
+> Original Comic By [Sanders](https://www.instagram.com/sandserifcomics/)
 
-## Graphicachu
+# Graphicachu
 
 #### Application Meeting
 ---
