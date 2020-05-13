@@ -101,7 +101,13 @@ class App extends React.Component {
 
      
       // evaluate the expression repeatedly for different values of x
-      const xValues = math.range(this.state.minX, this.state.maxX, 1).toArray();
+
+      // const min = 0;
+      // 백만 https://mathjs.org/docs/reference/functions/range.html
+      const step  = Math.abs(this.state.maxX - this.state.minX)/100000;
+
+      
+      const xValues = math.range(this.state.minX, this.state.maxX, step).toArray();
       const yValues = xValues.map(function (x1) {
          // console.log(x);
         return expr.evaluate({x: x1})
