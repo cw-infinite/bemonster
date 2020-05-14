@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/bemonster/static/css/main.42b4520b.chunk.css",
-    "main.js": "/bemonster/static/js/main.0d7ac42e.chunk.js",
-    "main.js.map": "/bemonster/static/js/main.0d7ac42e.chunk.js.map",
+    "main.js": "/bemonster/static/js/main.56bc9d23.chunk.js",
+    "main.js.map": "/bemonster/static/js/main.56bc9d23.chunk.js.map",
     "runtime-main.js": "/bemonster/static/js/runtime-main.1ea2fe60.js",
     "runtime-main.js.map": "/bemonster/static/js/runtime-main.1ea2fe60.js.map",
     "static/js/2.7e39eccc.chunk.js": "/bemonster/static/js/2.7e39eccc.chunk.js",
     "static/js/2.7e39eccc.chunk.js.map": "/bemonster/static/js/2.7e39eccc.chunk.js.map",
     "index.html": "/bemonster/index.html",
-    "precache-manifest.9e202828d511126385de6fa5326fdc45.js": "/bemonster/precache-manifest.9e202828d511126385de6fa5326fdc45.js",
+    "precache-manifest.d9dae56864d41f00ca2c2f784fc43543.js": "/bemonster/precache-manifest.d9dae56864d41f00ca2c2f784fc43543.js",
     "service-worker.js": "/bemonster/service-worker.js",
     "static/css/main.42b4520b.chunk.css.map": "/bemonster/static/css/main.42b4520b.chunk.css.map",
     "static/js/2.7e39eccc.chunk.js.LICENSE.txt": "/bemonster/static/js/2.7e39eccc.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.1ea2fe60.js",
     "static/js/2.7e39eccc.chunk.js",
     "static/css/main.42b4520b.chunk.css",
-    "static/js/main.0d7ac42e.chunk.js"
+    "static/js/main.56bc9d23.chunk.js"
   ]
 }

@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1c0cd421fa95ced989c1b07dd86a7d5f",
+    "revision": "f25d73227ab8c415a063ea0d4a503ee4",
     "url": "/bemonster/index.html"
   },
   {
-    "revision": "4503d1d28c150ce17d3b",
+    "revision": "2dd835c94af35f15470a",
     "url": "/bemonster/static/css/main.42b4520b.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/bemonster/static/js/2.7e39eccc.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "4503d1d28c150ce17d3b",
-    "url": "/bemonster/static/js/main.0d7ac42e.chunk.js"
+    "revision": "2dd835c94af35f15470a",
+    "url": "/bemonster/static/js/main.56bc9d23.chunk.js"
   },
   {
     "revision": "ccb2ebdf852e4193b1fb",
