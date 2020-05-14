@@ -94,6 +94,38 @@ class App extends React.Component {
 
    }
 
+   onAdd = (event) => {
+      event.preventDefault();
+
+      this.setState({
+         fxs: [...this.state.fxs, {
+            id: this.state.counter,
+            name: '',
+            fx: '',
+            color: '',
+            // style: '',
+            width: ''
+         }],
+         counter : ++this.state.counter
+      });
+
+
+   };
+
+   onRemove(i, event) {
+      console.log(i);
+      let fxs = [...this.state.fxs]
+      fxs.splice(i, 1);
+      this.setState({ fxs });
+   }
+
+   onFxChange(i, event) {
+      let fxs = [...this.state.fxs];
+      fxs[i].fx = event.target.value;
+      this.setState({ fxs });
+   }   
+   
+
    calculation = (string_fx) => {
 
       const node = math.parse(string_fx);
@@ -113,21 +145,18 @@ class App extends React.Component {
         return expr.evaluate({x: x1})
       });
 
-      console.log(xValues, yValues);
+      // console.log(xValues, yValues);
 
       return [xValues, yValues];
    }
 
-
-   onFxChange(i, event) {
-      let fxs = [...this.state.fxs];
-      fxs[i] = event.target.value;
-      this.setState({ fxs });
-   }   
+   onReset = (event) => {
+      event.preventDefault();
+   };
 
    onFormSubmit = (event) => {
       event.preventDefault();
-      console.log(this.state);
+      // console.log(this.state);
 
       let traces = [];
 
@@ -142,16 +171,30 @@ class App extends React.Component {
          showlegend: this.state.gridOption,
       };
 
-      let functions = this.state.fxs.slice();
-      functions.push(this.state.fx1);
-      functions.map(fx => {
-         if(fx){
-            let [x_trace, y_trace] = this.calculation(fx);
+      let fx_list = this.state.fxs.slice();
+
+      //temporary
+      fx_list.push({
+         id: 1,
+         name: '',
+         fx: this.state.fx1,
+         color: '',
+         // style: '',
+         width: ''
+      });
+
+      fx_list.map(fx_data => {
+         if(fx_data.fx){
+            let [x_trace, y_trace] = this.calculation(fx_data.fx);
             let trace = {
+               name: fx_data.name,
                x: x_trace,
                y: y_trace,
                type: "scatter",
                marker: { color: "red" },
+               // showlegend: true,
+               // mode: "lines", "markers", "lines+markers", "lines+markers+text", "none"
+               
             };
             traces.push(trace);
          }
@@ -163,24 +206,9 @@ class App extends React.Component {
          layout: layout,
       });
 
-      console.log("huh?");
+      
    };
    
-   onAdd = (event) => {
-      event.preventDefault();
-      this.setState({
-         fxs: [...this.state.fxs, '']
-      })
-   };
-
-   onRemove = (event) => {
-      console.log('whatup');
-   }
-   
-   onReset = (event) => {
-      event.preventDefault();
-   };
-
    render() {
 
       this.init_plotty();
@@ -190,7 +218,7 @@ class App extends React.Component {
 
          <div>
             <div className="app-main">
-               <div className="ui stackable two column row centered grid">
+               <div className="ui centered grid">
                   {/* Plot */}
                   <div className="column plot-box">
                      <Plot
@@ -228,8 +256,9 @@ class App extends React.Component {
                                  </div>
                               </div>
                            </div>
-
+                           
                            {/* X Range  */}
+                           <div className="ui divider"></div>
 
                            <div className="inline fields">
                               <div className="two wide field">
@@ -280,7 +309,7 @@ class App extends React.Component {
                               </div>
                            </div>
 
-                           {/* Y Axis Range  */}
+                           {/* Y Range  */}
 
                            <div className="inline fields">
                               <div className="two wide field">
@@ -332,6 +361,8 @@ class App extends React.Component {
                            </div>
 
                            {/* Y = AX + B Functions   */}
+                           <div className="ui divider"></div>
+                           
                            <div className="inline fields">
                               <div className="one wide field">
                                  <label> 
@@ -376,9 +407,12 @@ class App extends React.Component {
                               </div>
                            </div>
                            
+                           {/* Divider */}
+                           <div className="ui divider"></div>
+                           
                            {/* Dynamic Functions */}
-                           {this.state.fxs.map((el, i) => 
-                              <div className="inline fields">
+                           {this.state.fxs.map((fx, i) => 
+                              <div key={fx.id} className="inline fields">
                                  <div className="one wide field">
                                     <label>
                                        <h4>Y</h4>
@@ -408,7 +442,7 @@ class App extends React.Component {
                                  <div className="one wide field">
                                     <button
                                        className="ui icon button"
-                                       onClick={this.onRemove} >
+                                       onClick={this.onRemove.bind(this, i)} >
                                        <i className="minus red circle icon"></i>
                                     </button>
                                  </div>
@@ -441,6 +475,7 @@ class App extends React.Component {
                               </div>
                               <div className="field">
                                  <button
+                                    type="submit"
                                     className="ui right labeled pink icon button " >
                                     <i className="right arrow icon"></i>
                                     PLOT!

@@ -8,8 +8,8 @@
 }
 
 .plot-box {
-  /* min-width: 700px;
-  min-height: 450px; */
+  /* min-width: 700px;*/
+  min-height: 450px; 
   min-width: 700px;
 }
 .config-pad-box {
@@ -17,7 +17,7 @@
   min-width: 700px;
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 1390px) {
   /* .config-pad-box {
     min-width: 700px;
   } */
