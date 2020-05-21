@@ -3,6 +3,29 @@
   margin: 200px 0px;
 }
 
+.popover  {
+  position: absolute;
+  top: 320px;
+  right: 45px;
+  z-index: 2;
+}
+
+.cover {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+.default-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: rgba(80,227, 194, 100);
+  
+}
+
 .big-box {
   width:1400px;
 }

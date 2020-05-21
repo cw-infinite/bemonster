@@ -1,5 +1,5 @@
 {
-  "homepage": "https://cw-infinite.github.io/bemonster/",
+  "homepage": "https://cw-infinite.github.io/graphicachu/",
   "name": "reactcode",
   "version": "0.1.0",
   "private": true,
@@ -39,6 +39,7 @@
     "mathjs": "^6.6.4",
     "plotly.js": "^1.53.0",
     "plotly.js-dist": "^1.53.0",
+    "react-color": "^2.18.1",
     "react-plotly.js": "^2.4.0"
   }
 }

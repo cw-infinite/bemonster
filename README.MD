@@ -34,6 +34,8 @@ npm install react-plotly.js plotly.js --save-dev
 
 semantic ui cdn
 
+npm install react-color --save-dev
+
 ``` to deploy 
 npm run deploy
 ```

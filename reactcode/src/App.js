@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import { SketchPicker, TwitterPicker } from 'react-color';
 // import FxForm from './Components/FxForm'
 
 // import {
@@ -27,7 +28,10 @@ class App extends React.Component {
       maxX: 1000,
       minY: -1000,
 		maxY: 1000,
-		gridOption: false,
+      gridOption: false,
+      
+      displayColorPicker: false,
+
 
       graphName: "",
       yAxis: "",
@@ -35,7 +39,8 @@ class App extends React.Component {
 
       fxs: [],
 
-      // fx1: "",
+      fx1: "",
+      fx1Name: '',
 
       /*
 		config
@@ -102,9 +107,17 @@ class App extends React.Component {
             id: this.state.counter,
             name: '',
             fx: '',
-            color: '',
-            // style: '',
-            width: ''
+            width: '',
+            
+            displayColorPicker: false,
+            color: {
+               r: '241',
+               g: '112',
+               b: '19',
+               a: '1',
+            },
+            
+
          }],
          counter : ++this.state.counter
       });
@@ -124,7 +137,30 @@ class App extends React.Component {
       fxs[i].fx = event.target.value;
       this.setState({ fxs });
    }   
+
+   onFxNameChange(i, event) {
+      let fxs = [...this.state.fxs];
+      fxs[i].name = event.target.value;
+      this.setState({ fxs });
+   }   
+
+   handleColorPickClick(i, event) {
+      console.log(event.target.value)
+      let fxs = [...this.state.fxs];
+      fxs[i].displayColorPicker = !fxs[i].displayColorPicker;
+      this.setState({ fxs });
+    };
+  
+   handleColorPickClose(i, event) {
+      let fxs = [...this.state.fxs];
+      fxs[i].displayColorPicker = event.target.value;
+      this.setState({ fxs });
+   };
    
+   handleColorPickSelected(i, color) {
+      console.log(i, color);
+      this.setState({ color: color.rgb })
+   };
 
    calculation = (string_fx) => {
 
@@ -168,7 +204,8 @@ class App extends React.Component {
             title: this.state.yAxis,
          },
          title: this.state.graphName,
-         showlegend: this.state.gridOption,
+         // showlegend: this.state.gridOption,
+         showlegend: true,
       };
 
       let fx_list = this.state.fxs.slice();
@@ -176,7 +213,7 @@ class App extends React.Component {
       //temporary
       fx_list.push({
          id: 1,
-         name: '',
+         name: this.state.fx1Name,
          fx: this.state.fx1,
          color: '',
          // style: '',
@@ -212,7 +249,7 @@ class App extends React.Component {
    render() {
 
       this.init_plotty();
-      
+
       return (
 
 
@@ -377,7 +414,6 @@ class App extends React.Component {
                               <div className="seven wide field">
                                  <input type="text" placeholder="ax+b..."
                                  onChange={e => {
-                                    
                                     this.setState({ fx1: e.target.value });
                                  }}  />
                               </div>
@@ -387,11 +423,11 @@ class App extends React.Component {
                                     <div className="ui basic label">Name</div>
                                     <input
                                        type="text"
-                                       // onChange={(e) =>
-                                       //    this.setState({
-                                       //       maxY: e.target.value,
-                                       //    })
-                                       // }
+                                       onChange={(e) =>
+                                          this.setState({
+                                             fx1Name: e.target.value,
+                                          })
+                                       }
                                        // value={this.state.maxY}
 												placeholder="Enter name of this line.. "
                                     />
@@ -423,7 +459,7 @@ class App extends React.Component {
                                        <h3>=</h3>
                                     </label>
                                  </div>
-                                 <div className="seven wide field">
+                                 <div className="six wide field">
                                     <input type="text" placeholder="ax+b..." 
                                     onChange={this.onFxChange.bind(this, i)} />
                                  </div>
@@ -434,11 +470,30 @@ class App extends React.Component {
                                        <input
                                           type="text"
                                           placeholder="Enter Max Y.. "
-                                          // onChange={this.onFxChange.bind(this, i)}
+                                          onChange={this.onFxNameChange.bind(this, i)}
                                        />
                                     </div>
                                  </div>
-                     
+
+                                 <div className="one wide field">
+                                    <div className="ui icon button" onClick={ this.handleColorPickClick.bind(this, i) }>
+                                       {/* <i class="tint icon"></i> */}
+                                       <div className="default-color"   />
+                                       
+                                       
+
+                                    </div>
+                                    { this.state.fxs[i].displayColorPicker ? 
+                                       <div className="popover">
+                                          <div className="cover" onClick={ this.handleColorPickClick.bind(this, i) }/>
+                                          <SketchPicker color={ this.state.fxs[i].color } onChange={ this.handleColorPickSelected.bind(this, i)} />
+                                       </div> : null }
+                                    {/* <button
+                                       className="ui icon button"
+                                       onClick={this.onRemove.bind(this, i)} >
+                                       <i className="minus red circle icon"></i>
+                                    </button> */}
+                                 </div>
                                  <div className="one wide field">
                                     <button
                                        className="ui icon button"
@@ -453,13 +508,14 @@ class App extends React.Component {
 
                            <div className="inline fields">
 									   <div className="ui toggle checkbox">
-										<input type="checkbox" tabIndex="0" className="hidden" 
-										onChange={e => {
-											this.setState({gridOption : e.target.value});
-										}}
-										value={this.state.gridOption} />
-										<label>Grid option</label>
-									</div>
+                                 <input type="checkbox" tabIndex="0" className="hidden" 
+                                 onChange={e => {
+                                    this.setState({gridOption : e.target.value});
+                                 }}
+                                 value={this.state.gridOption} />
+                                 <label>Grid option</label>
+                              </div>
+                              
                            </div>
 
                            {/* Resset and  */}
