@@ -51,7 +51,7 @@ class App extends React.Component {
             x: [-50, -60, 1, 2, 3, 4, 5],
             y: [1, 4, 9, 16, 25, 100],
             type: "scatter",
-            marker: { color: "red" },
+            marker: { color: "#1f77b4" },
             name: "Red Trace",
          },
          {
@@ -110,12 +110,7 @@ class App extends React.Component {
             width: '',
             
             displayColorPicker: false,
-            color: {
-               r: '241',
-               g: '112',
-               b: '19',
-               a: '1',
-            },
+            color: '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             
 
          }],
@@ -144,22 +139,25 @@ class App extends React.Component {
       this.setState({ fxs });
    }   
 
-   handleColorPickClick(i, event) {
+   handleColorPick_Click(i, event) {
       console.log(event.target.value)
       let fxs = [...this.state.fxs];
       fxs[i].displayColorPicker = !fxs[i].displayColorPicker;
       this.setState({ fxs });
     };
   
-   handleColorPickClose(i, event) {
+   handleColorPick_Close(i, event) {
       let fxs = [...this.state.fxs];
-      fxs[i].displayColorPicker = event.target.value;
+      fxs[i].displayColorPicker = !fxs[i].displayColorPicker;
       this.setState({ fxs });
    };
    
-   handleColorPickSelected(i, color) {
-      console.log(i, color);
-      this.setState({ color: color.rgb })
+   handleColorPick_Selected(i, color) {
+      let fxs = [...this.state.fxs];
+      fxs[i].displayColorPicker = !fxs[i].displayColorPicker;
+      fxs[i].color = color.hex;
+      this.setState({ fxs });
+
    };
 
    calculation = (string_fx) => {
@@ -228,7 +226,7 @@ class App extends React.Component {
                x: x_trace,
                y: y_trace,
                type: "scatter",
-               marker: { color: "red" },
+               marker: { color: fx_data.color },
                // showlegend: true,
                // mode: "lines", "markers", "lines+markers", "lines+markers+text", "none"
                
@@ -247,6 +245,31 @@ class App extends React.Component {
    };
    
    render() {
+
+      const tooltip = `Basic operations\n
+
+      y = 0.034x + 13 * (3/2) -4
+      Exponential
+      
+      y = x^3
+      y = exp(x)
+      Radical expression
+      
+      y = sqrt(x)
+      y = x^(1/2)
+      Logarithms
+      
+      y = log(x)
+      Trigonometric functions
+      
+      y = sin(x)
+      y = cos(x)
+      y = tan(x)
+      Trigonometric functions with degrees
+      
+      y = sin(45 deg) + x
+      Constants
+      e, pi, tau`;
 
       this.init_plotty();
 
@@ -411,11 +434,17 @@ class App extends React.Component {
                                     <h3>=</h3>
                                  </label>
                               </div>
-                              <div className="seven wide field">
+                              <div className="seven wide field" 
+                              data-tooltip="Hello"
+                              data-inverted=""
+                              data-variation="wide"
+                              data-position="top right"
+                              data-title="Elliot Fu">
                                  <input type="text" placeholder="ax+b..."
                                  onChange={e => {
                                     this.setState({ fx1: e.target.value });
-                                 }}  />
+                                 }}  
+                                  />
                               </div>
                               
 										<div className="six wide field">
@@ -476,17 +505,15 @@ class App extends React.Component {
                                  </div>
 
                                  <div className="one wide field">
-                                    <div className="ui icon button" onClick={ this.handleColorPickClick.bind(this, i) }>
+                                    <div className="ui icon button" onClick={ this.handleColorPick_Click.bind(this, i) }>
                                        {/* <i class="tint icon"></i> */}
-                                       <div className="default-color"   />
-                                       
-                                       
-
+                                       <div className="default-color" style={{background : this.state.fxs[i].color}}  />
                                     </div>
                                     { this.state.fxs[i].displayColorPicker ? 
                                        <div className="popover">
-                                          <div className="cover" onClick={ this.handleColorPickClick.bind(this, i) }/>
-                                          <SketchPicker color={ this.state.fxs[i].color } onChange={ this.handleColorPickSelected.bind(this, i)} />
+                                          <div className="cover" onClick={ this.handleColorPick_Close.bind(this, i) }/>
+                                          {/* <SketchPicker color={ this.state.fxs[i].color } onChange={ this.handleColorPick_Selected.bind(this, i)} /> */}
+                                          <TwitterPicker width='290px' color={ this.state.fxs[i].color } onChange={ this.handleColorPick_Selected.bind(this, i)} />
                                        </div> : null }
                                     {/* <button
                                        className="ui icon button"
