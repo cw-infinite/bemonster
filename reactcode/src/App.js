@@ -31,12 +31,13 @@ class App extends React.Component {
       gridOption: false,
       
       displayColorPicker: false,
-
-
+      
       graphName: "",
       yAxis: "",
       xAxis: "",
 
+      initialSelect: 0,
+      legendOptions: [],
       fxs: [],
 
       fx1: "",
@@ -111,6 +112,7 @@ class App extends React.Component {
             
             displayColorPicker: false,
             color: '#'+(Math.random()*0xFFFFFF<<0).toString(16),
+            visible: true,
             
 
          }],
@@ -160,6 +162,33 @@ class App extends React.Component {
 
    };
 
+   onSelectChange = (event) => {
+      console.log(event.target.value);
+      const index = parseInt(event.target.value);
+      let data = this.state.data.slice();
+      if(index > 0){
+         data.map((trace, i) => {
+            // visible none.
+            // console.log(i, index);
+            if(i !== index-1){
+               trace.visible = false;
+            }
+            else{
+               trace.visible = trace.visible || true;
+            }
+         });
+
+      } else {
+         data.map((trace, i) => {
+            trace.visible = true;
+         });
+      }
+      this.setState({ 
+         data: data,
+         initialSelect: index 
+      });
+   }
+
    calculation = (string_fx) => {
 
       const node = math.parse(string_fx);
@@ -192,7 +221,7 @@ class App extends React.Component {
       event.preventDefault();
       // console.log(this.state);
 
-      let traces = [];
+      let traces = [], selectOptions = []; 
 
       let layout = {
          xaxis: {
@@ -209,16 +238,17 @@ class App extends React.Component {
       let fx_list = this.state.fxs.slice();
 
       //temporary
-      fx_list.push({
+      fx_list = [{
          id: 1,
          name: this.state.fx1Name,
          fx: this.state.fx1,
          color: '',
          // style: '',
-         width: ''
-      });
+         width: '',
+         visible: true
+      }, ...fx_list];
 
-      fx_list.map(fx_data => {
+      fx_list.map((fx_data, i) => {
          if(fx_data.fx){
             let [x_trace, y_trace] = this.calculation(fx_data.fx);
             let trace = {
@@ -227,18 +257,31 @@ class App extends React.Component {
                y: y_trace,
                type: "scatter",
                marker: { color: fx_data.color },
+               visible: fx_data.visible,
                // showlegend: true,
                // mode: "lines", "markers", "lines+markers", "lines+markers+text", "none"
                
             };
             traces.push(trace);
+
+            
+
          }
+
+         //Add select option
+         selectOptions.push({
+            index: i,
+            name: fx_data.name? fx_data.name : `Expression ${i} `
+         });
       })
       
+      console.log(selectOptions);
 
       this.setState({
          data: traces,
          layout: layout,
+         legendOptions : selectOptions,
+         initialSelect : 0,
       });
 
       
@@ -531,19 +574,20 @@ class App extends React.Component {
                               </div>         
                            )} 
 
-                            {/* Grid Options */}
+                            {/* Options */}
 
                            <div className="inline fields">
-									   <div className="ui toggle checkbox">
-                                 <input type="checkbox" tabIndex="0" className="hidden" 
-                                 onChange={e => {
-                                    this.setState({gridOption : e.target.value});
-                                 }}
-                                 value={this.state.gridOption} />
-                                 <label>Grid option</label>
-                              </div>
+
+                                 <div className="field ">
+                                    <label>Show Legend</label>
+                                 <select className="ui fluid search dropdown" multiple="" onChange={this.onSelectChange} value={this.state.initialSelect}>
+                                    <option key='0' value="0">Show All</option>
+                                    {this.state.legendOptions.map( (fx, i) => <option key={fx.index+1} value={fx.index+1}>{fx.name}</option> )}
+                                 </select>
+                                 </div>
                               
                            </div>
+
 
                            {/* Resset and  */}
                            <div className="inline fields">
