@@ -1,5 +1,5 @@
-![](https://miro.medium.com/max/1000/1*x7P7gqjo8k2_bj2rTQWAfg.jpeg)
-> Original Comic By [Sanders](https://www.instagram.com/sandserifcomics/)
+![](https://i.pinimg.com/236x/1e/30/41/1e3041cbac01fb863fbd2edfc6ae9236--ryan-gosling-hey-girl-ryan-gosling-meme.jpg)
+
 
 # Graphicachu
 
