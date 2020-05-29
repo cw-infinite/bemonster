@@ -49,8 +49,8 @@ class App extends React.Component {
       data: [
          // called trace.
          {
-            x: [-50, -60, 1, 2, 3, 4, 5],
-            y: [1, 4, 9, 16, 25, 100],
+            x: [-50, -60, 1, 2, 3, 4, 5, 6],
+            y: [1, 4, 9, 16, 25, 100, 2000],
             type: "scatter",
             marker: { color: "#1f77b4" },
             name: "Red Trace",
@@ -71,9 +71,12 @@ class App extends React.Component {
 
          xaxis: {
             title: "Name of X-Axis",
+            domain: [0, 1000]
+            
          },
          yaxis: {
             title: "Name of Y-Axis",
+            domain: [0, 3000]
          },
       },
       config: {
@@ -271,7 +274,7 @@ class App extends React.Component {
          //Add select option
          selectOptions.push({
             index: i,
-            name: fx_data.name? fx_data.name : `Expression ${i} `
+            name: fx_data.name? fx_data.name : `Expression ${i+1}`
          });
       })
       
@@ -346,10 +349,10 @@ class App extends React.Component {
                            <div className="ui equal width form">
                               <div className="fields">
                                  <div className="eight wide field">
-                                    <label>Graph Name</label>
+                                    <label>Graph Title</label>
                                     <input
                                        type="text"
-                                       placeholder="Graph Namee"
+                                       placeholder="Define title of the chart"
                                        onChange={(e) =>
                                           this.setState({
                                              graphName: e.target.value,
@@ -371,7 +374,7 @@ class App extends React.Component {
                                  <div className="ui input">
                                     <input
                                        type="text"
-                                       placeholder="Name of X-Axis..."
+                                       placeholder="Define title of X-Axis"
                                        onChange={(e) =>
                                           this.setState({
                                              xAxis: e.target.value,
@@ -422,7 +425,7 @@ class App extends React.Component {
                                  <div className="ui input">
                                     <input
                                        type="text"
-                                       placeholder="Name of Y-Axis..."
+                                       placeholder="Define title of Y-Axis"
                                        onChange={(e) =>
                                           this.setState({
                                              yAxis: e.target.value,
@@ -431,7 +434,7 @@ class App extends React.Component {
                                     />
                                  </div>
                               </div>
-                              <div className="four wide field">
+                              {/* <div className="four wide field">
                                  <div className="ui left labeled input">
                                     <div className="ui basic label">Min</div>
                                     <input
@@ -460,7 +463,7 @@ class App extends React.Component {
 												placeholder="Enter Max Y.. "
                                     />
                                  </div>
-                              </div>
+                              </div> */}
                            </div>
 
                            {/* Y = AX + B Functions   */}
@@ -501,7 +504,7 @@ class App extends React.Component {
                                           })
                                        }
                                        // value={this.state.maxY}
-												placeholder="Enter name of this line.. "
+												placeholder="Name of the equation"
                                     />
                                  </div>
                               </div>
@@ -541,7 +544,7 @@ class App extends React.Component {
                                        <div className="ui basic label">Name</div>
                                        <input
                                           type="text"
-                                          placeholder="Enter Max Y.. "
+                                          placeholder="Name of the equation"
                                           onChange={this.onFxNameChange.bind(this, i)}
                                        />
                                     </div>
@@ -579,7 +582,7 @@ class App extends React.Component {
                            <div className="inline fields">
 
                                  <div className="field ">
-                                    <label>Show Legend</label>
+                                    <label>Legend Option</label>
                                  <select className="ui fluid search dropdown" multiple="" onChange={this.onSelectChange} value={this.state.initialSelect}>
                                     <option key='0' value="0">Show All</option>
                                     {this.state.legendOptions.map( (fx, i) => <option key={fx.index+1} value={fx.index+1}>{fx.name}</option> )}
