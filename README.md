@@ -1,4 +1,4 @@
-![](https://i.pinimg.com/236x/1e/30/41/1e3041cbac01fb863fbd2edfc6ae9236--ryan-gosling-hey-girl-ryan-gosling-meme.jpg)
+![](https://media.makeameme.org/created/if-programmers-debug.jpg)
 
 
 # Graphicachu
