@@ -120,18 +120,14 @@ const fxFormReducer = (state = initial , action) => {
                data: traces,
                legendOptions : selectOptions,
                initialSelect : 0,
-            },
-            calculation: action.payload.calculation,
-            fxs: action.payload.fxs,
-            counterId: action.payload.counterId
+            }
          });
 
       case "FETCH_FXS" :
-         return initial;
+         return state;
       case "UPDATE_FXS" :
          console.log("does it wrok")
          return Object.assign({}, state, {
-            graphicachu: action.payload.graphicachu,
             calculation: action.payload.calculation,
             fxs: action.payload.fxs,
             counterId: action.payload.counterId

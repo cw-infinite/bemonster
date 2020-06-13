@@ -5,23 +5,21 @@ import { SketchPicker, TwitterPicker } from "react-color";
 // import { Checkbox } from 'semantic-ui-react'
 class FxForm extends Component {
    
-   graphicachu = this.props.graphicachu || null;
-   calculation  = this.props.calculation || null;
-   fxs  = this.props.fxs || null;
-   
    componentDidMount() {
+      console.log('fukme');
       this.props.fetchFxs();
    }
    
    setRedux = (type) => {
       
       const ctx = {
-         graphicachu: this.graphicachu,
          calculation: this.calculation,
          fxs: this.fxs,
          counterId: this.counterId
       }
+
       if(type === "submit"){
+         console.log('huh2?')
          this.props.submitFxForm(ctx);
       }
       else{
@@ -48,27 +46,32 @@ class FxForm extends Component {
    };
 
    onRemove(i, event) {
+      event.preventDefault();
       this.fxs.splice(i, 1);
-      console.log(this.fxs);
+      // console.log(this.fxs);
       this.setRedux("update");
    }
 // I think we can combine fx change nameChange and FXcolorclick.
    onFxChange(i, event) {
       this.fxs[i].fx = event.target.value;
+      this.setRedux("update");
    }
 
    onFxNameChange(i, event) {
       this.fxs[i].name = event.target.value;
+      this.setRedux("update");
    }
 
    onFxColor_Click(i, event) {
       this.fxs[i].displayColorPicker = !this.fxs[i].displayColorPicker;
+      this.setRedux("update");
    }
 
    onFxColor_Selected(i, color) {
       console.log('selected!');
       this.fxs[i].displayColorPicker = !this.fxs[i].displayColorPicker;
       this.fxs[i].color = color.hex;
+      this.setRedux("update");
    }
 
    onFormSubmit = (event) => {
@@ -301,8 +304,9 @@ class FxForm extends Component {
 // get copy of a state and do something. usually 'mapstatetoprops'
 // alllll of the state in the store
 const mapStateToProps = (state) => {
+   
+   console.log("FxForm state:", state);
    return {
-      graphicachu : state.fetchFxs.graphicachu,
       calculation : state.fetchFxs.calculation,
       fxs : state.fetchFxs.fxs,
       counterId: state.fetchFxs.counterId
