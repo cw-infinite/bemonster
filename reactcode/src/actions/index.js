@@ -7,17 +7,23 @@ export const fetchFxs = () => {
     }
 }
 
-export const submitFxForm = (ctx) => {
+export const submitFxForm = () => {
     return {
-        type : 'SUBMIT_FX_CONFIG',
-        payload : ctx
+        type : 'SUBMIT_FX_CONFIG'
     }
 }
 
-export const updateFxForm = (ctx) => {
+export const addFx = () => {
     return {
-        type : 'UPDATE_FXS',
-        payload : ctx
+        type : 'ADD_FX'
     }
 }
 
+export const removeFx = (index) => {
+    return {
+        type : 'REMOVE_FX',
+        payload : {
+            index
+        }
+    }
+}

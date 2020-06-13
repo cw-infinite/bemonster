@@ -77,17 +77,17 @@ const calculateTrace = (calculation, string_fx) => {
    return [xValues, yValues];
 }
 
-const fxFormReducer = (state = initial , action) => {
+const graphicachuReducer = (state = initial , action) => {
    
    switch(action.type){
       case "SUBMIT_FX_CONFIG" :
-         // let layout = {...action.payload.calculation};
-         // console.log(action.payload.calculation);
+         console.log('whatthefuk')
+         const stateCopy = {...state}
          let traces = [], selectOptions = []; 
-         action.payload.fxs.forEach((fx_data, i) => {
+         stateCopy.fxs.forEach((fx_data, i) => {
             if(fx_data.fx){
                
-               let [x_trace, y_trace] = calculateTrace(action.payload.calculation, fx_data.fx);
+               let [x_trace, y_trace] = calculateTrace(stateCopy.calculation, fx_data.fx);
                let trace = {
                   name: fx_data.name,
                   x: x_trace,
@@ -116,23 +116,51 @@ const fxFormReducer = (state = initial , action) => {
 
          return Object.assign({}, state, {
             graphicachu: {
-               ...action.payload.graphicachu,
+               ...(stateCopy.graphicachu),
                data: traces,
                legendOptions : selectOptions,
                initialSelect : 0,
             }
          });
+      default: 
+         return state;
+   
+   }
+}
+   
 
+const fxFormReducer = (state = initial , action) => {
+   
+   switch(action.type){
+      case "ADD_FX" :
+         let fxsCopy = [...state.fxs]
+         let cId = state.counterId + 1;
+         fxsCopy.push({
+            id: cId,
+            name: "",
+            fx: "",
+            width: "",
+            displayColorPicker: false,
+            color: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
+            visible: true,
+            compare: false
+         });
+         
+         return Object.assign({}, state, {
+            fxs: fxsCopy,
+            counterId: cId
+         });
+         case "REMOVE_FX" :
+            let fxs = [...state.fxs]
+            const index  = action.payload.index;
+            fxs.splice(action.payload.index, 1)
+            
+            return Object.assign({}, state, {
+               fxs
+            });
+            
       case "FETCH_FXS" :
          return state;
-      case "UPDATE_FXS" :
-         console.log("does it wrok")
-         return Object.assign({}, state, {
-            calculation: action.payload.calculation,
-            fxs: action.payload.fxs,
-            counterId: action.payload.counterId
-         });
-      
       default: 
          return state;
    
@@ -141,7 +169,8 @@ const fxFormReducer = (state = initial , action) => {
 }
 
 export default combineReducers({
-   submitFxForm: fxFormReducer,
+   submitFxForm: graphicachuReducer,
    fetchFxs: fxFormReducer,
-   updateFxForm: fxFormReducer
+   addFx: fxFormReducer,
+   removeFx: fxFormReducer 
 });

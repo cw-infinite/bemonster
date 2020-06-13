@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { submitFxForm, fetchFxs, updateFxForm} from "../actions";
+import { submitFxForm, fetchFxs, addFx, removeFx} from "../actions";
 import { SketchPicker, TwitterPicker } from "react-color";
 // import { Checkbox } from 'semantic-ui-react'
 class FxForm extends Component {
@@ -10,61 +10,34 @@ class FxForm extends Component {
       this.props.fetchFxs();
    }
    
-   setRedux = (type) => {
+   setRedux = () => {
+      this.props.submitFxForm();
       
-      const ctx = {
-         calculation: this.calculation,
-         fxs: this.fxs,
-         counterId: this.counterId
-      }
-
-      if(type === "submit"){
-         console.log('huh2?')
-         this.props.submitFxForm(ctx);
-      }
-      else{
-         console.log('huh?')
-         this.props.updateFxForm(ctx);
-      }
    }
 
    onAdd = (event) => {
       event.preventDefault();
-      
-      this.counterId++;
-      this.fxs.push({
-         id: this.counterId,
-         name: "",
-         fx: "",
-         width: "",
-         displayColorPicker: false,
-         color: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
-         visible: true,
-         compare: false
-      });
-      this.setRedux("update");
+      this.props.addFx();
    };
 
    onRemove(i, event) {
       event.preventDefault();
-      this.fxs.splice(i, 1);
-      // console.log(this.fxs);
-      this.setRedux("update");
+      this.props.removeFx(i);
    }
 // I think we can combine fx change nameChange and FXcolorclick.
    onFxChange(i, event) {
       this.fxs[i].fx = event.target.value;
-      this.setRedux("update");
+      this.setRedux();
    }
 
    onFxNameChange(i, event) {
       this.fxs[i].name = event.target.value;
-      this.setRedux("update");
+      this.setRedux();
    }
 
    onFxColor_Click(i, event) {
       this.fxs[i].displayColorPicker = !this.fxs[i].displayColorPicker;
-      this.setRedux("update");
+      this.setRedux();
    }
 
    onFxColor_Selected(i, color) {
@@ -316,5 +289,6 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
    submitFxForm,
    fetchFxs,
-   updateFxForm
+   addFx,
+   removeFx
 })(FxForm);

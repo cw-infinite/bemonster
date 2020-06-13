@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchFxs } from '../actions';
+import { submitFxForm } from '../actions';
 
 
 import createPlotlyComponent from "react-plotly.js/factory";
@@ -35,9 +35,9 @@ class Graphicachu extends Component {
 const mapStateToProps = (state) => {
     console.log("Gaphicachu state:", state);
     return {
-        graphicachu: {...state.fetchFxs.graphicachu},
+        graphicachu: {...state.submitFxForm.graphicachu},
     };
 }
 
-export default connect(mapStateToProps, { fetchFxs
+export default connect(mapStateToProps, { submitFxForm
 })(Graphicachu);
