@@ -1,20 +1,34 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { submitFxForm, fetchFxs, addFx, removeFx} from "../actions";
-import { SketchPicker, TwitterPicker } from "react-color";
+import { submitFxForm, fetchFxs, addFx, removeFx, editFx, compareFxForm} from "../actions";
+import { TwitterPicker } from "react-color";
+import { Form, Checkbox } from 'semantic-ui-react';
+
 // import { Checkbox } from 'semantic-ui-react'
 class FxForm extends Component {
    
+   layout = {
+      title: "Title of Graph",
+      showlegend: true,
+      xaxis: {
+         title: "Name of X-Axis",
+         domain: [0, 1000],
+      },
+      yaxis: {
+         title: "Name of Y-Axis",
+         domain: [0, 3000],
+      },
+   }
+
+   calculation = {
+      minX: 0,
+      maxX: 0,
+   }
+
    componentDidMount() {
-      console.log('fukme');
       this.props.fetchFxs();
    }
    
-   setRedux = () => {
-      this.props.submitFxForm();
-      
-   }
-
    onAdd = (event) => {
       event.preventDefault();
       this.props.addFx();
@@ -24,42 +38,63 @@ class FxForm extends Component {
       event.preventDefault();
       this.props.removeFx(i);
    }
-// I think we can combine fx change nameChange and FXcolorclick.
-   onFxChange(i, event) {
-      this.fxs[i].fx = event.target.value;
-      this.setRedux();
-   }
 
-   onFxNameChange(i, event) {
-      this.fxs[i].name = event.target.value;
-      this.setRedux();
+   onFxChangeGen(i, event){
+      let fxCopy = {...this.props.fxs[i]};
+      fxCopy[event.target.name] = event.target.value;
+      this.props.editFx(i, fxCopy);
    }
 
    onFxColor_Click(i, event) {
-      this.fxs[i].displayColorPicker = !this.fxs[i].displayColorPicker;
-      this.setRedux();
+      let fxCopy = {...this.props.fxs[i]};
+      fxCopy.displayColorPicker = !fxCopy.displayColorPicker;
+      this.props.editFx(i, fxCopy);
    }
 
    onFxColor_Selected(i, color) {
-      console.log('selected!');
-      this.fxs[i].displayColorPicker = !this.fxs[i].displayColorPicker;
-      this.fxs[i].color = color.hex;
-      this.setRedux("update");
+      let fxCopy = {...this.props.fxs[i]};
+      fxCopy.displayColorPicker = !fxCopy.displayColorPicker;
+      fxCopy.color = color.hex;
+      this.props.editFx(i, fxCopy);
    }
+
+   onCompare = (event) => {
+      event.preventDefault();
+      const ctx = {
+         fxs: this.props.fxs,
+         layout: this.layout,
+         calculation: this.props.calculation
+      }
+      this.props.compareFxForm(ctx);
+   };
 
    onFormSubmit = (event) => {
       event.preventDefault();
-      this.setRedux("submit");
+      const ctx = {
+         fxs: this.props.fxs,
+         layout: this.layout,
+         calculation: this.props.calculation
+      }
+      this.props.submitFxForm(ctx);
    };
+
+   handleCheckboxClick = (i, event) =>{
+      // console.log(i, event.target.checked);
+      let fxCopy = {...this.props.fxs[i]};
+      fxCopy[event.target.name] = event.target.checked;
+      this.props.editFx(i, fxCopy)
+   } 
+
 
    fetchFxList() {
       // console.log(this.fxs);
       return (
-         this.fxs.map((fx, i) => (
+         this.props.fxs.map((fx, i) => (
             <div key={fx.id} className="inline fields">
                <div className="one wide field">
-                  <div className="ui checkbox">
-                     <input type="checkbox" name="example" />
+                  <div className="ui checkbox" data-content={fx.disabled? "Deselect checkboxes" : ""}>
+                     <input type="checkbox" name="compare" disabled={fx.checkBoxDisabled}
+                        onClick={this.handleCheckboxClick.bind(this, i)}/>
                      <label></label>
                   </div>
                </div>
@@ -75,9 +110,10 @@ class FxForm extends Component {
                </div>
                <div className="six wide field">
                   <input
+                     name="fx"
                      type="text"
                      placeholder="ax+b..."
-                     onChange={this.onFxChange.bind(this, i)}
+                     onChange={this.onFxChangeGen.bind(this, i)}
                   />
                </div>
 
@@ -85,9 +121,10 @@ class FxForm extends Component {
                   <div className="ui left labeled input">
                      <div className="ui basic label">Name</div>
                      <input
+                        name="name"
                         type="text"
                         placeholder="Name of the equation"
-                        onChange={this.onFxNameChange.bind(this, i)}
+                        onChange={this.onFxChangeGen.bind(this, i)}
                      />
                   </div>
                </div>
@@ -105,7 +142,7 @@ class FxForm extends Component {
                         }}
                      />
                   </div>
-                  {this.fxs[i].displayColorPicker ? (
+                  {this.props.fxs[i].displayColorPicker ? (
                      <div className="popover">
                         <div
                            className="cover"
@@ -167,7 +204,7 @@ class FxForm extends Component {
                               name="layout.title"
                               placeholder="Graph Title"
                               onChange={(e) => {
-                                 this.graphicachu.layout.title = e.target.value;
+                                 this.layout.title = e.target.value;
                               }}
                            />
                         </div>
@@ -187,7 +224,7 @@ class FxForm extends Component {
                               type="text"
                               placeholder="Define title of X-Axis"
                               onChange={(e) => {
-                                 this.graphicachu.layout.xaxis.title =
+                                 this.layout.xaxis.title =
                                     e.target.value;
                               }}
                            />
@@ -235,7 +272,7 @@ class FxForm extends Component {
                               name="layout.yaxis.title"
                               placeholder="Define title of Y-Axis"
                               onChange={(e) => {
-                                 this.graphicachu.layout.yaxis.title =
+                                 this.layout.yaxis.title =
                                     e.target.value;
                               }}
                            />
@@ -248,24 +285,29 @@ class FxForm extends Component {
 
                   {/* Dynamic Functions */}
                   {this.fetchFxList()}
+                              
 
-                  <div className="field ">
-                     <button
-                        className="ui right labeled yellow icon button"
-                        onClick={this.onReset}
-                     >
-                        <i className="right undo icon"></i>
-                        RESET?
-                     </button>
-                  </div>
-                  <div className="field">
-                     <button
-                        type="submit"
-                        className="ui right labeled pink icon button "
-                     >
-                        <i className="right arrow icon"></i>
-                        PLOT!
-                     </button>
+                  <div className="inline fields">
+                     <div className="field ">
+                        <button className="ui right labeled blue icon button"
+                           onClick={this.onReset}>
+                           <i className="right undo icon"></i>
+                           RESET?
+                        </button>
+                     </div>
+                     <div className="field">
+                        <button className="ui right labeled yellow icon button " disabled={this.props.compareDisabled}
+                           onClick={this.onCompare}>
+                           <i className="right clone icon"></i>
+                           Compare
+                        </button>
+                     </div>
+                     <div className="field">
+                        <button type="submit" className="ui right labeled pink icon button ">
+                           <i className="right chart line icon"></i>
+                           PLOT!
+                        </button>
+                     </div>
                   </div>
                </form>
             </div>
@@ -282,7 +324,8 @@ const mapStateToProps = (state) => {
    return {
       calculation : state.fetchFxs.calculation,
       fxs : state.fetchFxs.fxs,
-      counterId: state.fetchFxs.counterId
+      counterId: state.fetchFxs.counterId,
+      compareDisabled: state.fetchFxs.compareDisabled,
    };
 };
 
@@ -290,5 +333,7 @@ export default connect(mapStateToProps, {
    submitFxForm,
    fetchFxs,
    addFx,
-   removeFx
+   removeFx,
+   editFx,
+   compareFxForm
 })(FxForm);

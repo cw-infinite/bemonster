@@ -1,4 +1,5 @@
 import { combineReducers} from 'redux';
+import { e } from 'mathjs';
 const math = require('mathjs');
 
 const initial = {
@@ -47,9 +48,12 @@ const initial = {
          displayColorPicker: false,
          color: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
          visible: true,
+         compare: false,
+         checkBoxDisabled: false,
       },
    ],
    counterId: 0,
+   compareDisabled: true,
 
 }
 
@@ -78,17 +82,16 @@ const calculateTrace = (calculation, string_fx) => {
 }
 
 const graphicachuReducer = (state = initial , action) => {
-   
+   const stateCopy = {...state};
+   let traces = [], selectOptions = [], trace; 
    switch(action.type){
       case "SUBMIT_FX_CONFIG" :
-         console.log('whatthefuk')
-         const stateCopy = {...state}
-         let traces = [], selectOptions = []; 
-         stateCopy.fxs.forEach((fx_data, i) => {
+         
+         action.payload.fxs.forEach((fx_data, i) => {
             if(fx_data.fx){
                
-               let [x_trace, y_trace] = calculateTrace(stateCopy.calculation, fx_data.fx);
-               let trace = {
+               let [x_trace, y_trace] = calculateTrace(action.payload.calculation, fx_data.fx);
+               trace = {
                   name: fx_data.name,
                   x: x_trace,
                   y: y_trace,
@@ -100,8 +103,6 @@ const graphicachuReducer = (state = initial , action) => {
                   
                };
                traces.push(trace);
-   
-               
    
             }
    
@@ -120,6 +121,65 @@ const graphicachuReducer = (state = initial , action) => {
                data: traces,
                legendOptions : selectOptions,
                initialSelect : 0,
+               layout: action.payload.layout
+            }
+         });
+      
+      case "COMPARE_FX_CONFIG" :
+
+      
+         const layoutCopy = {...(action.payload.layout)};
+         
+         const compareFxs = action.payload.fxs.filter(fx => {
+            return fx.compare;
+         });
+         compareFxs.forEach((fx_data, i) => {
+            if(fx_data.fx && fx_data.compare === true){
+               
+               let [x_trace, y_trace] = calculateTrace(action.payload.calculation, fx_data.fx);
+               let trace = {
+                  name: fx_data.name,
+                  x: x_trace,
+                  y: y_trace,
+                  type: "scatter",
+                  marker: { color: fx_data.color },
+                  visible: fx_data.visible,                  
+               };
+               console.log(layoutCopy['yaxis' + (i?i+1:'')] );
+               if(!i){
+                  layoutCopy['yaxis' + (i?i+1:'')] = {
+                     title: fx_data.name,
+                  }
+               }
+               else{
+                  trace.yaxis = `y${i+1}`;
+                  layoutCopy['yaxis' + (i?i+1:'')] = {
+                     title: fx_data.name,
+                     // titlefont: {color: fx_data.color},
+                     // tickfont: {color: fx_data.color},
+                     overlaying: 'y',
+                     side: 'right',
+                     // anchor: 'free',
+                  };
+               }
+               traces.push(trace);
+
+            }
+   
+            //Add select option
+            selectOptions.push({
+               index: i,
+               name: fx_data.name ? fx_data.name : `Expression ${i+1}`
+            });
+         });
+
+         return Object.assign({}, state, {
+            graphicachu: {
+               ...(stateCopy.graphicachu),
+               data: traces,
+               legendOptions : selectOptions,
+               initialSelect : 0,
+               layout: layoutCopy
             }
          });
       default: 
@@ -130,10 +190,10 @@ const graphicachuReducer = (state = initial , action) => {
    
 
 const fxFormReducer = (state = initial , action) => {
-   
+   let fxsCopy = [...state.fxs];
    switch(action.type){
       case "ADD_FX" :
-         let fxsCopy = [...state.fxs]
+         
          let cId = state.counterId + 1;
          fxsCopy.push({
             id: cId,
@@ -143,22 +203,41 @@ const fxFormReducer = (state = initial , action) => {
             displayColorPicker: false,
             color: "#" + ((Math.random() * 0xffffff) << 0).toString(16),
             visible: true,
-            compare: false
+            compare: false,
+            checkBoxDisabled: false,
          });
          
          return Object.assign({}, state, {
             fxs: fxsCopy,
             counterId: cId
          });
-         case "REMOVE_FX" :
-            let fxs = [...state.fxs]
-            const index  = action.payload.index;
-            fxs.splice(action.payload.index, 1)
+      case "REMOVE_FX" :
+         fxsCopy.splice(action.payload.index, 1)
+         
+         return Object.assign({}, state, {
+            fxs: fxsCopy
+         });
             
-            return Object.assign({}, state, {
-               fxs
-            });
-            
+      case "Edit_FX" :
+         fxsCopy[action.payload.index] = action.payload.fx;
+
+         const numOfChecked = fxsCopy.reduce((numOfCompare, fx) => {
+            return numOfCompare + (fx.compare ? 1 : 0);
+         }, 0);
+
+         fxsCopy.forEach(fx => {
+            if( numOfChecked > 1){
+               if(!fx.compare)
+                  fx.checkBoxDisabled = true;
+            } else {
+               fx.checkBoxDisabled = false;
+            }
+         });
+
+         return Object.assign({}, state, {
+            fxs: fxsCopy,
+            compareDisabled: (numOfChecked < 2),
+         });
       case "FETCH_FXS" :
          return state;
       default: 
@@ -170,7 +249,9 @@ const fxFormReducer = (state = initial , action) => {
 
 export default combineReducers({
    submitFxForm: graphicachuReducer,
+   compareFxForm: graphicachuReducer,
    fetchFxs: fxFormReducer,
    addFx: fxFormReducer,
-   removeFx: fxFormReducer 
+   removeFx: fxFormReducer,
+   editFx: fxFormReducer
 });
