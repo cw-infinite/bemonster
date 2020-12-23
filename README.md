@@ -1,4 +1,4 @@
-![](https://i.pinimg.com/564x/e2/f2/e8/e2f2e8b15f4e54cf1bfdaa0bf567a697.jpg)
+![](https://miro.medium.com/max/700/1*If2Wlp49ta9UZhRBj0ZWkw.png)
 
 
 # Graphicachu
